@@ -125,7 +125,8 @@ def test_orientation_turns_with_the_frame(tracker, robot_yaw_deg, box_yaw_deg):
     tracked = _detect(tracker, math.radians(box_yaw_deg))
     expected = math.radians(robot_yaw_deg + box_yaw_deg)
     off = _angle_between(_yaw(tracked.orientation), expected)
-    assert off < 1e-6, (
+    # yaw passes through the Kalman filter's float32 state
+    assert off < 1e-5, (
         f'robot turned {robot_yaw_deg:+.0f} deg, box turned {box_yaw_deg:+.0f} deg '
         f'from the robot: the track faces {math.degrees(_yaw(tracked.orientation)):+.1f} '
         f'deg in {GLOBAL_FRAME}, expected {robot_yaw_deg + box_yaw_deg:+.1f} deg.'

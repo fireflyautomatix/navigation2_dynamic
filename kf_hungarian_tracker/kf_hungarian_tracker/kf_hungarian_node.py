@@ -53,6 +53,10 @@ class KFHungarianTracker(Node):
                 ("death_threshold", 3),
                 ("measurement_noise_cov", [1.0, 1.0, 1.0]),
                 ("error_cov_post", [1.0, 1.0, 1.0, 10.0, 10.0, 10.0]),
+                # yaw and yaw rate, in rad and rad/s, filtered alongside position
+                ("yaw_measurement_noise_cov", 0.1),
+                ("yaw_error_cov_post", [0.1, 1.0]),
+                ("yaw_process_noise_cov", 1.0),
                 ("vel_filter", [0.1, 2.0]),
                 ("height_filter", [-2.0, 2.0]),
                 ("cost_filter", 1.0),
@@ -65,6 +69,11 @@ class KFHungarianTracker(Node):
         self.measurement_noise_cov = self.get_parameter("measurement_noise_cov")._value
         self.error_cov_post = self.get_parameter("error_cov_post")._value
         self.process_noise_cov = self.get_parameter("process_noise_cov")._value
+        self.yaw_measurement_noise_cov = self.get_parameter(
+            "yaw_measurement_noise_cov"
+        )._value
+        self.yaw_error_cov_post = self.get_parameter("yaw_error_cov_post")._value
+        self.yaw_process_noise_cov = self.get_parameter("yaw_process_noise_cov")._value
         self.vel_filter = self.get_parameter("vel_filter")._value
         self.height_filter = self.get_parameter("height_filter")._value
         self.top_down = self.get_parameter("top_down")._value
@@ -283,6 +292,9 @@ class KFHungarianTracker(Node):
                     self.measurement_noise_cov,
                     self.error_cov_post,
                     self.process_noise_cov,
+                    self.yaw_measurement_noise_cov,
+                    self.yaw_error_cov_post,
+                    self.yaw_process_noise_cov,
                 )
                 self.obstacle_list.append(obstacle)
 
